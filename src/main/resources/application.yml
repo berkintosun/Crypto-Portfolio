@@ -16,3 +16,4 @@ spring:
 crypto:
   path: "https://api.coingecko.com/api/v3/simple/price"
   supported: "https://api.coingecko.com/api/v3/coins/list"
+  market-clean-rate: 60000

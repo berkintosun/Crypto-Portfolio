@@ -1,7 +1,7 @@
 package com.berkin.cryptoportfolio.service;
 
-import com.berkin.cryptoportfolio.dto.AssetDTO;
 import com.berkin.cryptoportfolio.dto.CreateAssetRequest;
+import com.berkin.cryptoportfolio.dto.AssetDTO;
 import com.berkin.cryptoportfolio.dto.SupportedAssetsDTO;
 import com.berkin.cryptoportfolio.entity.Asset;
 import com.berkin.cryptoportfolio.entity.auth.User;
@@ -9,14 +9,17 @@ import com.berkin.cryptoportfolio.repository.AssetRepository;
 import com.berkin.cryptoportfolio.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -78,16 +81,7 @@ public class AssetService {
         return assetDTOS;
     }
 
-    public boolean deleteAsset(String username, long assetId) {
-        Asset asset = assetRepository.findById(assetId).orElse(null);
-        if(asset == null || asset.getUserId() != getUserIdFromUsername(username)){
-            throw new RuntimeException("Asset cannot be deleted");
-        }
-        assetRepository.deleteById(assetId);
-        return true;
-    }
-
-
+    @Cacheable("marketrate")
     public BigDecimal getAssetPrice(String name, String currency){
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -102,6 +96,28 @@ public class AssetService {
         }
     }
 
+    @CacheEvict(value = "marketrate", allEntries = true)
+    @Scheduled(fixedRateString = "${crypto.market-clean-rate}")
+    public void evictMarketRateCaches(){}
+
+    public boolean deleteAsset(String username, long assetId) {
+        Asset asset = assetRepository.findById(assetId).orElse(null);
+        if(asset == null || asset.getUserId() != getUserIdFromUsername(username)){
+            throw new RuntimeException("Asset cannot be deleted");
+        }
+        assetRepository.deleteById(assetId);
+        return true;
+    }
+
+    public long getUserIdFromUsername(String username){
+        User user = userRepository.findByUsername(username).orElse(null);
+        if(user == null){
+            throw new RuntimeException("User cannot found"); //Technically not necessary as this function wont execute without proper principal
+        }
+        return user.getId();
+    }
+
+    @Cacheable("supportedcoins")
     public List<SupportedAssetsDTO> getSupportedAssetNames() {
         try {
             String response = restTemplate.getForObject(supportedUrl, String.class);
@@ -111,13 +127,5 @@ public class AssetService {
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Error rate exceeded", e);
         }
-    }
-
-    public long getUserIdFromUsername(String username){
-        User user = userRepository.findByUsername(username).orElse(null);
-        if(user == null){
-            throw new RuntimeException("User cannot found"); //Technically not necessary as this function wont execute without proper principal
-        }
-        return user.getId();
     }
 }
