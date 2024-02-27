@@ -13,3 +13,6 @@ spring:
     show-sql: false
   profiles:
     active: local
+crypto:
+  path: "https://api.coingecko.com/api/v3/simple/price"
+  supported: "https://api.coingecko.com/api/v3/coins/list"

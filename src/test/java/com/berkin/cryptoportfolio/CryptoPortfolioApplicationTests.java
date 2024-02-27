@@ -1,4 +1,4 @@
-package com.berkin.CryptoPortfolio;
+package com.berkin.cryptoportfolio;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

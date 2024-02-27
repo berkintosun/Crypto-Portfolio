@@ -1,4 +1,4 @@
-package com.berkin.CryptoPortfolio.entity.auth;
+package com.berkin.cryptoportfolio.entity.auth;
 
 import jakarta.persistence.*;
 import lombok.Data;
