@@ -6,6 +6,8 @@ import com.berkin.cryptoportfolio.service.AssetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @RequestMapping("/assets")
 public class AssetController {
@@ -14,8 +16,8 @@ public class AssetController {
 
     @PostMapping("/{userid}")
     @ResponseBody
-    AssetDTO addAsset(@PathVariable long userid, @RequestBody CreateAssetRequest assetRequest){
-        return assetService.createAsset(userid,assetRequest);
+    AssetDTO addAsset(@RequestBody CreateAssetRequest assetRequest, Principal principal){
+        return assetService.createAsset(principal.getName(),assetRequest);
     }
 
 }
