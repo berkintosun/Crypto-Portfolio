@@ -1,7 +1,7 @@
 package com.berkin.cryptoportfolio.controller;
 
-import com.berkin.cryptoportfolio.dto.CreateAssetRequest;
 import com.berkin.cryptoportfolio.dto.AssetDTO;
+import com.berkin.cryptoportfolio.dto.CreateAssetRequest;
 import com.berkin.cryptoportfolio.dto.SupportedAssetsDTO;
 import com.berkin.cryptoportfolio.service.AssetService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,6 +19,7 @@ import java.util.List;
 @RequestMapping("/assets")
 @Tag(name = "Asset",description = "testing")
 public class AssetController {
+
     @Autowired
     AssetService assetService;
 

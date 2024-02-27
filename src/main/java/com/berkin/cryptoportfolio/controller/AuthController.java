@@ -5,6 +5,8 @@ import com.berkin.cryptoportfolio.dto.SignupDTO;
 import com.berkin.cryptoportfolio.entity.auth.User;
 import com.berkin.cryptoportfolio.repository.RoleRepository;
 import com.berkin.cryptoportfolio.repository.UserRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
@@ -42,6 +44,20 @@ public class AuthController {
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
 
     @PostMapping("/login")
+    @Operation(
+            description = "Allows user to login to the system. It uses custom authentication system.",
+            summary = "Login endpoint in order to be able to use the system",
+            responses = {
+                    @ApiResponse(
+                            description = "Created",
+                            responseCode = "201"
+                    ),
+                    @ApiResponse(
+                            description = "Unauthorized",
+                            responseCode = "403"
+                    )
+            }
+    )
     public ResponseEntity<String> login(@RequestBody LoginDTO loginDTO, HttpServletRequest request, HttpServletResponse response) {
         try {
             Authentication authentication = authenticationManager
@@ -57,6 +73,20 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
+    @Operation(
+            description = "It creates a new user and assigns the standard role to the user.",
+            summary = "Creating a new account",
+            responses = {
+                    @ApiResponse(
+                            description = "Created",
+                            responseCode = "201"
+                    ),
+                    @ApiResponse(
+                            description = "Unauthorized",
+                            responseCode = "403"
+                    )
+            }
+    )
     public ResponseEntity signUp(@RequestBody SignupDTO signupDTO){
         if(!userRepository.findByUsername(signupDTO.getUsername()).isEmpty()){
             return new ResponseEntity<>("Username exist", HttpStatus.BAD_REQUEST);
