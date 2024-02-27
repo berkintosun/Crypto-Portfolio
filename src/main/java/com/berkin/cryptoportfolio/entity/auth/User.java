@@ -1,9 +1,11 @@
 package com.berkin.cryptoportfolio.entity.auth;
 
+import com.berkin.cryptoportfolio.entity.Asset;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 
@@ -22,6 +24,9 @@ public class User {
     private String email;
     @Column(name = "password")
     private String password;
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE})
+    @JoinColumn(name = "user_id")
+    private List<Asset> assets;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user2roles",
