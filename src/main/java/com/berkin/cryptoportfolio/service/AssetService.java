@@ -2,6 +2,7 @@ package com.berkin.cryptoportfolio.service;
 
 import com.berkin.cryptoportfolio.dto.AssetDTO;
 import com.berkin.cryptoportfolio.dto.CreateAssetRequest;
+import com.berkin.cryptoportfolio.dto.SupportedAssetsDTO;
 import com.berkin.cryptoportfolio.entity.Asset;
 import com.berkin.cryptoportfolio.entity.auth.User;
 import com.berkin.cryptoportfolio.repository.AssetRepository;
@@ -19,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -97,6 +99,17 @@ public class AssetService {
             return new BigDecimal(jsonNode.get(name).get(currency).asText());
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Error rate exceeded");
+        }
+    }
+
+    public List<SupportedAssetsDTO> getSupportedAssetNames() {
+        try {
+            String response = restTemplate.getForObject(supportedUrl, String.class);
+            ObjectMapper objectMapper = new ObjectMapper();
+            SupportedAssetsDTO[] supportedAssetsDTOS = objectMapper.readValue(response,SupportedAssetsDTO[].class);
+            return Arrays.asList(supportedAssetsDTOS);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error rate exceeded", e);
         }
     }
 
