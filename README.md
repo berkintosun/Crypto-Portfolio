@@ -11,9 +11,13 @@ For this project, I also wanted to implement a custom authorization and authenti
 Flyway is used for database migration as well.
 
 For functionalities, I choose to not aggregate the same type assets when user calls the `list` endpoint. The reason is that, every asset has their own purchase date and this information would be lost during the process. This data can be useful to display the potential profit that they achieved by comparing the asset market value at given time with current one.
-For deployment, I would add Dockerfile but I choose to skip it as I was coded on Windows without WSL.
+For deployment, I would add Dockerfile, but I choose to skip it as I was coded on Windows without WSL.
 
 For running `gradle bootRun`
 For testing `gradle test` 
 
 would be enough and gradle wrappers are also provided inside of this project. Please use Gradle version >=8.5 as there might be issues such as https://github.com/gradle/gradle/issues/24390
+
+Also for mapping task, I was planning to use Mapstruct, but I avoided as it was small mappings.
+
+I am grateful to anyone that takes time to check this project out. I appreciate any feedback and suggestions.
