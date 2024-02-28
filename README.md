@@ -5,6 +5,11 @@ This project implements the given functionalities and provides a document about 
 The documentation with swagger-ui is accessable via `/swagger-ui/index.html` endpoint. If you would like to try the APIs through swagger-ui, please use login API first as I did not setup embed auth to the swagger-ui
 
 I used `CoinGecko` as 3rd party crypto API provider because I believe its interface is simpler and it provides better rate limit options in free tier.
+The creation of asset depends on crypto type of the `coinGecko coin id`. This was one of the reasons why I choose `CoinGecko` as it had the easily readable currency names and it provides list of currencies that they support.
+For example, when you want to create Bitcoin asset, the type should be `bitcoin` and when you want to create Bitcoin 2 asset, the type should be `bitcoin-2` ass it represents the id in CoinGecko system.
+
+To clarification, I also added extra endpoint that returns supported list. Please feel free to check it out.
+
 I am caching the results for `1 minute` and this setting is changable through the configuration file `application.yml`
 For this project, I also wanted to implement a custom authorization and authentication system. Currently user can signup, login and have role based authorities. In the implementation, it uses a default role as there are not that many functionalities that would help demonstrate benefits of it.
 
