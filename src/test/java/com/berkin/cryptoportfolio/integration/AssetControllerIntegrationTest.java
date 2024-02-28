@@ -1,4 +1,4 @@
-package com.berkin.cryptoportfolio;
+package com.berkin.cryptoportfolio.integration;
 
 import com.berkin.cryptoportfolio.dto.AssetDTO;
 import com.berkin.cryptoportfolio.dto.CreateAssetRequest;

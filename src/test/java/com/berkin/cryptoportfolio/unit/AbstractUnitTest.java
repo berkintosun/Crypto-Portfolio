@@ -1,5 +1,6 @@
-package com.berkin.cryptoportfolio;
+package com.berkin.cryptoportfolio.unit;
 
+import com.berkin.cryptoportfolio.TestDataBuilder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
